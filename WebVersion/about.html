@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>About Place - TravelMate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+    <h2>TravelMate</h2>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="places.html">Places</a></li>
+        <li><a href="book.html">Book</a></li>
+    </ul>
+</nav>
+
+<div class="about-section">
+    <h1 id="placeTitle"></h1>
+    <img id="placeImage" class="about-img" alt="Destination image">
+    <div id="placeContent"></div>
+    <a id="bookBtn" class="book-btn">Book Now</a>
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const place = params.get("place")?.toLowerCase();
+
+const title = document.getElementById("placeTitle");
+const image = document.getElementById("placeImage");
+const content = document.getElementById("placeContent");
+const bookBtn = document.getElementById("bookBtn");
+
+const placesData = {
+
+    goa: {
+        name: "Goa",
+        img: "Images/Goa.png",
+        desc: `
+        <p>Goa is famous for its beautiful beaches and vibrant nightlife.</p>
+        <p>It offers water sports, beach resorts, and Portuguese heritage architecture.</p>
+        <p>The seafood and coastal cuisine attract food lovers.</p>
+        <p>Visitors enjoy relaxing sunsets and exciting parties.</p>
+        <p>It is one of India's most popular holiday destinations.</p>`
+    },
+
+    jaipur: {
+        name: "Jaipur",
+        img: "Images/Jaipur.png",
+        desc: `
+        <p>Jaipur is known as the Pink City of India.</p>
+        <p>It features royal palaces like Hawa Mahal and Amer Fort.</p>
+        <p>The city reflects rich Rajput architecture and heritage.</p>
+        <p>Colorful markets and handicrafts attract tourists.</p>
+        <p>It is one of India's top heritage destinations.</p>`
+    },
+
+    ooty: {
+        name: "Ooty",
+        img: "Images/Ooty.png",
+        desc: `
+        <p>Ooty is a beautiful hill station in Tamil Nadu.</p>
+        <p>It is surrounded by tea plantations and cool weather.</p>
+        <p>The botanical gardens are very famous.</p>
+        <p>It is perfect for family vacations and relaxation.</p>
+        <p>The scenic beauty attracts tourists all year round.</p>`
+    },
+
+    mumbai: {
+        name: "Mumbai",
+        img: "Images/Mumbai.png",
+        desc: `
+        <p>Mumbai is known as the city of dreams.</p>
+        <p>It is home to Bollywood and Marine Drive.</p>
+        <p>The Gateway of India is a major attraction.</p>
+        <p>The city never sleeps and has vibrant nightlife.</p>
+        <p>It is India's financial capital.</p>`
+    },
+
+    delhi: {
+        name: "Delhi",
+        img: "Images/Delhi.png",
+        desc: `
+        <p>Delhi is the capital city of India.</p>
+        <p>It is home to Red Fort and India Gate.</p>
+        <p>The city reflects Mughal and modern architecture.</p>
+        <p>Street food and markets are very popular.</p>
+        <p>It is rich in culture and history.</p>`
+    },
+
+    manali: {
+        name: "Manali",
+        img: "Images/Manali.png",
+        desc: `
+        <p>Manali is a scenic hill station in Himachal Pradesh.</p>
+        <p>It is surrounded by snow-capped mountains.</p>
+        <p>Adventure sports are very popular here.</p>
+        <p>Solang Valley attracts thrill seekers.</p>
+        <p>It is ideal for honeymoon and trekking trips.</p>`
+    },
+
+    paris: {
+        name: "Paris",
+        img: "Images/Paris.png",
+        desc: `
+        <p>Paris is known as the city of love.</p>
+        <p>The Eiffel Tower is its iconic landmark.</p>
+        <p>It is famous for fashion and art.</p>
+        <p>The cuisine and culture attract millions.</p>
+        <p>It is one of the most visited cities in the world.</p>`
+    },
+
+    dubai: {
+        name: "Dubai",
+        img: "Images/Dubai.png",
+        desc: `
+        <p>Dubai is famous for luxury and skyscrapers.</p>
+        <p>The Burj Khalifa is the tallest building in the world.</p>
+        <p>It offers desert safaris and shopping festivals.</p>
+        <p>Modern architecture defines the skyline.</p>
+        <p>It is a global tourism hub.</p>`
+    },
+
+    bali: {
+        name: "Bali",
+        img: "Images/Bali.png",
+        desc: `
+        <p>Bali is known for its temples and beaches.</p>
+        <p>It offers peaceful landscapes and island beauty.</p>
+        <p>Traditional culture and art are highlights.</p>
+        <p>It is perfect for honeymoon and relaxation.</p>
+        <p>The tropical vibe attracts tourists worldwide.</p>`
+    }
+};
+
+if (placesData[place]) {
+    title.textContent = placesData[place].name;
+    image.src = placesData[place].img;
+    content.innerHTML = placesData[place].desc;
+    bookBtn.href = "book.html?place=" + place;
+} else {
+    title.textContent = "Place Not Found";
+    content.innerHTML = "<p>Sorry, this destination is not available.</p>";
+    image.style.display = "none";
+    bookBtn.style.display = "none";
+}
+
+</script>
+
+</body>
+</html>

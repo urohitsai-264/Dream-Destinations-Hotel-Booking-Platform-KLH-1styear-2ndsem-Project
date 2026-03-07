@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Payment - TravelMate</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="booking">
+
+<h1>Payment</h1>
+
+<div id="paymentDetails"></div>
+
+<form id="paymentForm">
+
+<label>Card Holder Name</label>
+<input type="text" id="name" required>
+
+<label>Card Number</label>
+<input type="text" maxlength="16" required>
+
+<label>Expiry Date</label>
+<input type="month" required>
+
+<label>CVV</label>
+<input type="password" maxlength="3" required>
+
+<button type="submit">Pay Now</button>
+
+</form>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const hotel = params.get("hotel") || "N/A";
+const place = params.get("place") || "N/A";
+const checkin = params.get("checkin") || "N/A";
+const checkout = params.get("checkout") || "N/A";
+const total = params.get("total") || "0";
+const rooms = params.get("rooms") || "0";
+
+const paymentDetails = document.getElementById("paymentDetails");
+
+const hotelEl = document.createElement("h3");
+hotelEl.textContent = `Hotel: ${hotel}`;
+
+const placeEl = document.createElement("p");
+placeEl.textContent = `Place: ${place}`;
+
+const roomsEl = document.createElement("p");
+roomsEl.textContent = `Rooms: ${rooms}`;
+
+const checkinEl = document.createElement("p");
+checkinEl.textContent = `Check-in: ${checkin}`;
+
+const checkoutEl = document.createElement("p");
+checkoutEl.textContent = `Check-out: ${checkout}`;
+
+const totalEl = document.createElement("p");
+totalEl.textContent = `Total Amount: Rs.${total}`;
+
+paymentDetails.append(hotelEl, placeEl, roomsEl, checkinEl, checkoutEl, totalEl);
+
+document.getElementById("paymentForm").addEventListener("submit", function(e) {
+
+e.preventDefault();
+
+/* Get customer name */
+let customerName = document.getElementById("name").value;
+
+/* Redirect to confirmation page */
+window.location.href =
+"confirmation.html?hotel=" + encodeURIComponent(hotel) +
+"&place=" + encodeURIComponent(place) +
+"&rooms=" + encodeURIComponent(rooms) +
+"&checkin=" + encodeURIComponent(checkin) +
+"&checkout=" + encodeURIComponent(checkout) +
+"&total=" + encodeURIComponent(total) +
+"&name=" + encodeURIComponent(customerName);
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+1,1,Sea View Resort,6000.0,5
+2,1,Beach Paradise,4500.0,5
+3,1,Goa Luxury Stay,7500.0,5
+4,2,Snow Peak Resort,5200.0,5
+5,2,Mountain View Inn,3900.0,5
+6,2,Manali Comfort Stay,4500.0,5
+7,3,Capital Residency,5500.0,5
+8,3,Delhi Royal Stay,6200.0,5
+9,3,Metro Grand Hotel,4700.0,5
+10,4,Hill View Resort,4000.0,5
+11,4,Ooty Lake Stay,3500.0,5
+12,4,Green Valley Hotel,4800.0,5
+13,5,Pink Palace Hotel,5000.0,5
+14,5,Royal Heritage Inn,6500.0,5
+15,5,Jaipur Residency,4200.0,5
+16,6,Marine Drive Hotel,7000.0,5
+17,6,City Grand Inn,4800.0,5
+18,6,Mumbai Elite Stay,8500.0,5
+19,7,Desert Palm Resort,15000.0,5
+20,7,Dubai Marina Hotel,13000.0,5
+21,7,Burj View Stay,17000.0,5
+22,8,Bali Beach Resort,9000.0,5
+23,8,Island Paradise Hotel,7500.0,5
+24,8,Ubud Green Stay,6800.0,5
+25,9,Eiffel Grand Hotel,12000.0,5
+26,9,Paris Boutique Stay,9800.0,5
+27,9,Louvre Residency,11000.0,5

@@ -1,0 +1,390 @@
+/* ================= GLOBAL RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* ================= NAVBAR ================= */
+nav,
+header {
+    background-color: #1f3c5b;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 60px;
+}
+
+nav h2,
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #ffd700;
+}
+
+/* ================= HERO SECTION ================= */
+.hero {
+    height: 90vh;
+    background: url("Images/Hero.png") no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+.hero-content {
+    position: relative;
+    color: white;
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+.btn {
+    background: #ffc107;
+    color: black;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #ff9800;
+    transform: scale(1.05);
+}
+
+/* ================= TITLES ================= */
+.title,
+.section-title {
+    text-align: center;
+    margin: 40px 0 20px 0;
+    font-size: 32px;
+    color: #1f3c5b;
+}
+
+/* ================= GRID ================= */
+.places-container,
+.container,
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 40px 80px;
+}
+
+/* ================= CARD STYLE ================= */
+.card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border: 1px solid #eef1f5;
+    transition: 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.14);
+}
+
+.card img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+}
+
+.card h3 {
+    text-align: center;
+    padding: 15px;
+    font-size: 20px;
+}
+
+.card p {
+    text-align: center;
+    padding-bottom: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* ================= ABOUT PAGE ================= */
+.about-section {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+#placeTitle {
+    font-size: 36px;
+    margin-bottom: 25px;
+    color: #1f3c5b;
+}
+
+.about-img {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+#placeContent {
+    text-align: left;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+/* ================= BOOKING PAGE ================= */
+.booking {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.booking h1 {
+    color: #1f3c5b;
+    margin-bottom: 25px;
+}
+
+.booking form {
+    background: white;
+    width: 420px;
+    max-width: 92%;
+    margin: 0 auto 40px auto;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.booking select,
+.booking input {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.booking select:focus,
+.booking input:focus {
+    outline: none;
+    border-color: #1f3c5b;
+    box-shadow: 0 0 0 3px rgba(31, 60, 91, 0.12);
+}
+
+.booking button {
+    background-color: #1f3c5b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.booking button:hover {
+    background-color: #15304a;
+}
+
+
+/* ================= CONFIRMATION PAGE ================= */
+
+.confirmation-container{
+    text-align: center;
+    margin: 80px auto 0 auto;
+    width: 90%;
+    max-width: 700px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 32px 24px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.1);
+}
+
+.confirmation-container h1{
+    font-size: 40px;
+    color: #1f3c5b;
+    margin-bottom: 20px;
+}
+
+.confirmation-container h2{
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.confirmation-container p{
+    font-size: 18px;
+    margin: 8px 0;
+}
+
+.confirmation-container button{
+    margin-top: 25px;
+    padding: 12px 30px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ffc107;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.confirmation-container button:hover{
+    background-color: #ff9800;
+    transform: scale(1.05);
+}
+/* ================= HOTEL RESULT SECTION ================= */
+#hotelSection {
+    margin: 40px 80px;
+}
+
+.hotel-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.hotel-card:hover {
+    transform: scale(1.02);
+}
+
+.hotel-card h3 {
+    color: #1f3c5b;
+    margin-bottom: 10px;
+}
+
+.hotel-card p {
+    margin: 8px 0;
+}
+
+.hotel-card button {
+    padding: 10px 20px;
+    background-color: #1f3c5b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.hotel-card button:hover {
+    background-color: #15304a;
+}
+
+/* ================= MAP ================= */
+#map {
+    height: 400px;
+    width: 80%;
+    margin: 40px auto;
+    border-radius: 15px;
+    display: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* ================= FOOTER ================= */
+footer {
+    background-color: #1f3c5b;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 50px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1000px) {
+    .places-container,
+    .container,
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    nav {
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+    }
+
+    .places-container,
+    .container,
+    .grid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 30px;
+    }
+
+    .hero-content p {
+        font-size: 16px;
+    }
+
+    .booking form {
+        width: 90%;
+    }
+
+    #hotelSection {
+        margin: 20px;
+    }
+
+    #map {
+        width: 95%;
+    }
+}

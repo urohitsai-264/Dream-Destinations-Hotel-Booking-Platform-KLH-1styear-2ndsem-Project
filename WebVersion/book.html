@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking - TravelMate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="booking">
+    <h1>Book Your Stay</h1>
+
+    <form id="bookingForm">
+
+        <label>Full Name</label>
+        <input type="text" id="name" required>
+
+        <label>Email Address</label>
+        <input type="email" id="email" required>
+
+        <label>Select Destination</label>
+        <select id="placeSelect" required>
+            <option value="">-- Choose Destination --</option>
+            <option value="Goa">Goa</option>
+            <option value="Jaipur">Jaipur</option>
+            <option value="Manali">Manali</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Ooty">Ooty</option>
+            <option value="Paris">Paris</option>
+            <option value="Dubai">Dubai</option>
+            <option value="Bali">Bali</option>
+        </select>
+
+        <label>Check-in Date</label>
+        <input type="date" id="checkin" required>
+
+        <label>Check-out Date</label>
+        <input type="date" id="checkout" required>
+
+        <label>Number of Rooms Required</label>
+        <input type="number" id="rooms" min="1" max="5" required>
+
+        <button type="submit">Check Hotels</button>
+
+    </form>
+</div>
+
+<script>
+
+// Form Submission
+document.getElementById("bookingForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let name = document.getElementById("name").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let place = document.getElementById("placeSelect").value;
+    let checkin = document.getElementById("checkin").value;
+    let checkout = document.getElementById("checkout").value;
+    let rooms = parseInt(document.getElementById("rooms").value);
+
+    if(place === ""){
+        alert("Please select a destination.");
+        return;
+    }
+
+    if(checkout <= checkin){
+        alert("Check-out date must be after Check-in date.");
+        return;
+    }
+
+    if(!rooms || rooms < 1){
+        alert("Please enter valid number of rooms.");
+        return;
+    }
+    if(rooms > 5){
+        alert("Maximum rooms allowed per booking is 5.");
+        return;
+    }
+
+    // Redirect to hotels page
+    window.location.href =
+        "hotels.html?place=" + encodeURIComponent(place) +
+        "&rooms=" + rooms +
+        "&checkin=" + encodeURIComponent(checkin) +
+        "&checkout=" + encodeURIComponent(checkout) +
+        "&name=" + encodeURIComponent(name) +
+        "&email=" + encodeURIComponent(email);
+});
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Booking Confirmed</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="confirmation-container">
+
+<h1>Booking Confirmed</h1>
+
+<div id="confirmDetails"></div>
+
+<a href="index.html" class="btn return-btn">Return Home</a>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+const name = params.get("name") || "Guest";
+const place = params.get("place") || "N/A";
+const hotel = params.get("hotel") || "N/A";
+const checkin = params.get("checkin") || "N/A";
+const checkout = params.get("checkout") || "N/A";
+const rooms = params.get("rooms") || "0";
+const total = params.get("total") || "0";
+
+const confirmDetails = document.getElementById("confirmDetails");
+
+const hotelEl = document.createElement("h2");
+hotelEl.textContent = hotel;
+
+const nameEl = document.createElement("p");
+nameEl.innerHTML = "<b>Booked By:</b> ";
+nameEl.append(document.createTextNode(name));
+
+const placeEl = document.createElement("p");
+placeEl.innerHTML = "<b>Place:</b> ";
+placeEl.append(document.createTextNode(place));
+
+const roomsEl = document.createElement("p");
+roomsEl.innerHTML = "<b>Rooms Booked:</b> ";
+roomsEl.append(document.createTextNode(rooms));
+
+const checkinEl = document.createElement("p");
+checkinEl.innerHTML = "<b>Check-in Date:</b> ";
+checkinEl.append(document.createTextNode(checkin));
+
+const checkoutEl = document.createElement("p");
+checkoutEl.innerHTML = "<b>Check-out Date:</b> ";
+checkoutEl.append(document.createTextNode(checkout));
+
+const totalEl = document.createElement("p");
+totalEl.innerHTML = "<b>Money Paid:</b> ";
+totalEl.append(document.createTextNode(`Rs.${total}`));
+
+const msgEl = document.createElement("p");
+msgEl.textContent = "Your reservation has been successfully confirmed.";
+
+confirmDetails.append(hotelEl, nameEl, placeEl, roomsEl, checkinEl, checkoutEl, totalEl, msgEl);
+
+</script>
+
+</body>
+</html>

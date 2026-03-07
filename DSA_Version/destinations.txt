@@ -1,0 +1,9 @@
+1,Goa
+2,Manali
+3,Delhi
+4,Ooty
+5,Jaipur
+6,Mumbai
+7,Dubai
+8,Bali
+9,Paris

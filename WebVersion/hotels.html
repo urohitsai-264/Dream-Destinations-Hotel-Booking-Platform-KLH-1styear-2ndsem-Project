@@ -1,0 +1,450 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Available Hotels - TravelMate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>TravelMate</h1>
+</header>
+
+<h2 class="section-title" id="title"></h2>
+
+<div class="grid" id="hotelContainer"></div>
+
+<footer>
+    <p>(c) 2026 TravelMate | All Rights Reserved</p>
+</footer>
+
+<script>
+const HOTEL_TOTAL_ROOMS = 5;
+const STORAGE_KEY = "hotelBookingsV2";
+
+const hotelsData = {
+
+    Goa: [
+        { name: "Sea View Resort", price: 6000, image: "Images/Screenshot 2026-03-03 175035.png" },
+        { name: "Beach Paradise", price: 4500, image: "Images/Screenshot 2026-03-03 175117.png" },
+        { name: "Goa Luxury Stay", price: 7500, image: "Images/Screenshot 2026-03-03 175139.png" }
+    ],
+
+    Jaipur: [
+        { name: "Pink Palace Hotel", price: 5000, image: "Images/Screenshot 2026-03-03 175329.png" },
+        { name: "Royal Heritage Inn", price: 6500, image: "Images/Screenshot 2026-03-03 175353.png" },
+        { name: "Jaipur Residency", price: 4200, image: "Images/Screenshot 2026-03-03 175205.png" }
+    ],
+
+    Ooty: [
+        { name: "Hill View Resort", price: 4000, image: "Images/Screenshot 2026-03-03 175950.png" },
+        { name: "Ooty Lake Stay", price: 3500, image: "Images/Screenshot 2026-03-03 180119.png" },
+        { name: "Green Valley Hotel", price: 4800, image: "Images/Screenshot 2026-03-03 180149.png" }
+    ],
+
+    Mumbai: [
+        { name: "Marine Drive Hotel", price: 7000, image: "Images/Screenshot 2026-03-03 175756.png" },
+        { name: "City Grand Inn", price: 4800, image: "Images/Screenshot 2026-03-03 175730.png" },
+        { name: "Mumbai Elite Stay", price: 8500, image: "Images/Screenshot 2026-03-03 175534.png" }
+    ],
+
+    Delhi: [
+        { name: "Capital Residency", price: 5500, image: "Images/Screenshot 2026-03-03 175426.png" },
+        { name: "Delhi Royal Stay", price: 6200, image: "Images/Screenshot 2026-03-03 175630.png" },
+        { name: "Metro Grand Hotel", price: 4700, image: "Images/Screenshot 2026-03-03 175901.png" }
+    ],
+
+    Manali: [
+        { name: "Snow Peak Resort", price: 5200, image: "Images/Screenshot 2026-03-03 174955.png" },
+        { name: "Mountain View Inn", price: 3900, image: "Images/Screenshot 2026-03-03 174725.png" },
+        { name: "Manali Comfort Stay", price: 4500, image: "Images/Screenshot 2026-03-03 174858.png" }
+    ],
+
+    Paris: [
+        { name: "Eiffel Grand Hotel", price: 12000, image: "Images/Screenshot 2026-03-03 180257.png" },
+        { name: "Paris Boutique Stay", price: 9800, image: "Images/Screenshot 2026-03-03 180329.png" },
+        { name: "Louvre Residency", price: 11000, image: "Images/Screenshot 2026-03-03 175236.png" }
+    ],
+
+    Dubai: [
+        { name: "Desert Palm Resort", price: 15000, image: "Images/Screenshot 2026-03-03 180452.png" },
+        { name: "Dubai Marina Hotel", price: 13000, image: "Images/Screenshot 2026-03-03 180539.png" },
+        { name: "Burj View Stay", price: 17000, image: "Images/Screenshot 2026-03-03 180558.png" }
+    ],
+
+    Bali: [
+        { name: "Bali Beach Resort", price: 9000, image: "Images/Screenshot 2026-03-03 180626.png" },
+        { name: "Island Paradise Hotel", price: 7500, image: "Images/Screenshot 2026-03-03 180645.png" },
+        { name: "Ubud Green Stay", price: 6800, image: "Images/Screenshot 2026-03-03 180720.png" }
+    ]
+};
+
+function parseISODate(value) {
+    if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        return null;
+    }
+    const [year, month, day] = value.split("-").map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    if (Number.isNaN(date.getTime())) {
+        return null;
+    }
+    return date;
+}
+
+function formatISODate(date) {
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+function utcToday() {
+    const now = new Date();
+    return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+}
+
+function addDays(date, days) {
+    const next = new Date(date.getTime());
+    next.setUTCDate(next.getUTCDate() + days);
+    return next;
+}
+
+function nightsBetween(checkIn, checkOut) {
+    return Math.round((checkOut - checkIn) / 86400000);
+}
+
+function isInStay(date, checkIn, checkOut) {
+    return date >= checkIn && date < checkOut;
+}
+
+function hotelElementId(hotelName) {
+    return "status-" + hotelName.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function loadState() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+        try {
+            const parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.confirmed) && Array.isArray(parsed.waiting)) {
+                return parsed;
+            }
+        } catch (e) {
+            // fall through to migration/default
+        }
+    }
+
+    const legacyRaw = localStorage.getItem("hotelBookings");
+    if (legacyRaw) {
+        try {
+            const legacy = JSON.parse(legacyRaw);
+            const migrated = { confirmed: [], waiting: [], lastId: 0 };
+            const today = utcToday();
+            const tomorrow = addDays(today, 1);
+            for (const hotelName in legacy) {
+                if (!Object.prototype.hasOwnProperty.call(legacy, hotelName)) {
+                    continue;
+                }
+                const item = legacy[hotelName] || {};
+                const roomsBooked = Number(item.roomsBooked) || 0;
+                const waitingList = Number(item.waitingList) || 0;
+
+                if (roomsBooked > 0) {
+                    migrated.lastId += 1;
+                    migrated.confirmed.push({
+                        bookingId: migrated.lastId,
+                        hotelName: hotelName,
+                        rooms: roomsBooked,
+                        checkIn: formatISODate(today),
+                        checkOut: formatISODate(tomorrow),
+                        status: "CONFIRMED"
+                    });
+                }
+
+                if (waitingList > 0) {
+                    migrated.lastId += 1;
+                    migrated.waiting.push({
+                        bookingId: migrated.lastId,
+                        hotelName: hotelName,
+                        rooms: waitingList,
+                        checkIn: formatISODate(today),
+                        checkOut: formatISODate(tomorrow),
+                        status: "WAITING",
+                        priority: migrated.waiting.length + 1
+                    });
+                }
+            }
+            saveState(migrated);
+            return migrated;
+        } catch (e) {
+            // fall through to default
+        }
+    }
+
+    return { confirmed: [], waiting: [], lastId: 0 };
+}
+
+function saveState(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function roomsBookedOnDate(hotelName, date, confirmed) {
+    let total = 0;
+    confirmed.forEach((booking) => {
+        if (booking.hotelName !== hotelName || booking.status !== "CONFIRMED") {
+            return;
+        }
+        const checkIn = parseISODate(booking.checkIn);
+        const checkOut = parseISODate(booking.checkOut);
+        if (!checkIn || !checkOut) {
+            return;
+        }
+        if (isInStay(date, checkIn, checkOut)) {
+            total += Number(booking.rooms) || 0;
+        }
+    });
+    return total;
+}
+
+function canAllocateRooms(hotelName, rooms, checkIn, checkOut, confirmed) {
+    let day = new Date(checkIn.getTime());
+    while (day < checkOut) {
+        const booked = roomsBookedOnDate(hotelName, day, confirmed);
+        if (booked + rooms > HOTEL_TOTAL_ROOMS) {
+            return false;
+        }
+        day = addDays(day, 1);
+    }
+    return true;
+}
+
+function vacantRoomsOnDate(hotelName, date, confirmed) {
+    return Math.max(0, HOTEL_TOTAL_ROOMS - roomsBookedOnDate(hotelName, date, confirmed));
+}
+
+function findNextVacancyDate(hotelName, confirmed, fromDate) {
+    let date = new Date(fromDate.getTime());
+    const limit = addDays(fromDate, 365);
+    while (date <= limit) {
+        if (vacantRoomsOnDate(hotelName, date, confirmed) > 0) {
+            return date;
+        }
+        date = addDays(date, 1);
+    }
+    return null;
+}
+
+function findEarliestAvailableCheckIn(hotelName, rooms, nights, fromDate, confirmed) {
+    let cursor = new Date(fromDate.getTime());
+    const limit = addDays(fromDate, 365);
+    while (cursor <= limit) {
+        const candidateCheckOut = addDays(cursor, nights);
+        if (canAllocateRooms(hotelName, rooms, cursor, candidateCheckOut, confirmed)) {
+            return cursor;
+        }
+        cursor = addDays(cursor, 1);
+    }
+    return null;
+}
+
+function processWaitingList(state) {
+    const waiting = [...state.waiting].sort((a, b) => (a.priority || 0) - (b.priority || 0));
+    const today = utcToday();
+    let changed = false;
+    const remaining = [];
+
+    waiting.forEach((entry) => {
+        if (entry.status !== "WAITING") {
+            changed = true;
+            return;
+        }
+        const checkIn = parseISODate(entry.checkIn);
+        const checkOut = parseISODate(entry.checkOut);
+        if (!checkIn || !checkOut) {
+            remaining.push(entry);
+            return;
+        }
+        if (checkIn <= today && canAllocateRooms(entry.hotelName, Number(entry.rooms), checkIn, checkOut, state.confirmed)) {
+            state.confirmed.push({
+                ...entry,
+                status: "CONFIRMED",
+                confirmedAt: formatISODate(today)
+            });
+            changed = true;
+        } else {
+            remaining.push(entry);
+        }
+    });
+
+    if (changed) {
+        state.waiting = remaining;
+        saveState(state);
+    }
+}
+
+const params = new URLSearchParams(window.location.search);
+const place = params.get("place");
+const rooms = parseInt(params.get("rooms"), 10);
+const checkInText = params.get("checkin");
+const checkOutText = params.get("checkout");
+const guestName = params.get("name") || "";
+const guestEmail = params.get("email") || "";
+const checkInDate = parseISODate(checkInText);
+const checkOutDate = parseISODate(checkOutText);
+const nights = checkInDate && checkOutDate ? nightsBetween(checkInDate, checkOutDate) : 0;
+
+const title = document.getElementById("title");
+const container = document.getElementById("hotelContainer");
+let state = loadState();
+processWaitingList(state);
+state = loadState();
+
+if (place && hotelsData[place] && checkInDate && checkOutDate && nights > 0) {
+    title.innerText =
+    "Hotels in " + place +
+    " | Rooms Needed: " + rooms +
+    " | Check-in: " + checkInText +
+    " | Check-out: " + checkOutText;
+
+    const sortedHotels = [...hotelsData[place]].sort((a, b) => a.price - b.price);
+    sortedHotels.forEach((hotel) => {
+        container.innerHTML += `
+<div class="card">
+<img src="${hotel.image || "Images/Hero.png"}" alt="${hotel.name}">
+<h3>${hotel.name}</h3>
+<p>Rs.${hotel.price} per night</p>
+<p id="${hotelElementId(hotel.name)}"></p>
+<button class="btn" onclick="bookHotel('${hotel.name}', ${hotel.price})">
+Book Now
+</button>
+</div>
+`;
+    });
+    updateHotelStatus();
+} else {
+    title.innerText = "Please start from booking page with valid check-in/check-out dates.";
+}
+
+function bookHotel(hotelName, price) {
+    let state = loadState();
+    processWaitingList(state);
+    state = loadState();
+
+    if (!Number.isInteger(rooms) || rooms <= 0) {
+        alert("Invalid room count.");
+        return;
+    }
+    if (rooms > HOTEL_TOTAL_ROOMS) {
+        alert("Maximum rooms allowed per booking is 5.");
+        return;
+    }
+
+    if (!checkInDate || !checkOutDate || nights <= 0) {
+        alert("Invalid check-in/check-out dates.");
+        return;
+    }
+
+    if (canAllocateRooms(hotelName, rooms, checkInDate, checkOutDate, state.confirmed)) {
+        state.lastId = Number(state.lastId || 0) + 1;
+        state.confirmed.push({
+            bookingId: state.lastId,
+            hotelName: hotelName,
+            place: place,
+            rooms: rooms,
+            guestName: guestName,
+            guestEmail: guestEmail,
+            checkIn: checkInText,
+            checkOut: checkOutText,
+            total: price * rooms * nights,
+            status: "CONFIRMED"
+        });
+        saveState(state);
+
+        const total = price * rooms * nights;
+        window.location.href =
+        "payment.html?hotel=" + encodeURIComponent(hotelName) +
+        "&place=" + encodeURIComponent(place) +
+        "&rooms=" + encodeURIComponent(rooms) +
+        "&checkin=" + encodeURIComponent(checkInText) +
+        "&checkout=" + encodeURIComponent(checkOutText) +
+        "&total=" + encodeURIComponent(total);
+        return;
+    }
+
+    const nextAvailableDate = findEarliestAvailableCheckIn(hotelName, rooms, nights, checkInDate, state.confirmed);
+    if (!nextAvailableDate) {
+        alert("No rooms are available in this hotel for the next 1 year.");
+        return;
+    }
+
+    const nextAvailableText = formatISODate(nextAvailableDate);
+    const nextVacantRooms = vacantRoomsOnDate(hotelName, nextAvailableDate, state.confirmed);
+    const shouldJoin = window.confirm(
+        "All 5 rooms are already booked for selected dates.\n" +
+        "Next vacancy: " + nextVacantRooms + " room(s) on " + nextAvailableText + "\n" +
+        "Do you want to continue and join waiting list for this date?"
+    );
+    if (!shouldJoin) {
+        return;
+    }
+
+    const requestedDate = window.prompt(
+        "Enter check-in date to join waiting list (YYYY-MM-DD):",
+        nextAvailableText
+    );
+    if (!requestedDate) {
+        return;
+    }
+
+    const requestedWaitDate = parseISODate(requestedDate.trim());
+    if (!requestedWaitDate || formatISODate(requestedWaitDate) !== nextAvailableText) {
+        alert("Waiting list is allowed only for suggested date: " + nextAvailableText);
+        return;
+    }
+
+    state.lastId = Number(state.lastId || 0) + 1;
+    state.waiting.push({
+        bookingId: state.lastId,
+        hotelName: hotelName,
+        place: place,
+        rooms: rooms,
+        guestName: guestName,
+        guestEmail: guestEmail,
+        checkIn: nextAvailableText,
+        checkOut: formatISODate(addDays(requestedWaitDate, nights)),
+        total: price * rooms * nights,
+        status: "WAITING",
+        priority: state.waiting.length + 1
+    });
+    saveState(state);
+    alert("Added to waiting list.");
+    updateHotelStatus();
+}
+
+function updateHotelStatus() {
+    const state = loadState();
+    const today = utcToday();
+    const hotels = hotelsData[place] || [];
+
+    hotels.forEach((hotel) => {
+        const el = document.getElementById(hotelElementId(hotel.name));
+        if (!el) {
+            return;
+        }
+        const availableToday = vacantRoomsOnDate(hotel.name, today, state.confirmed);
+        const nextVacancyDate = findNextVacancyDate(hotel.name, state.confirmed, today);
+        const vacantRooms = nextVacancyDate ? vacantRoomsOnDate(hotel.name, nextVacancyDate, state.confirmed) : 0;
+        const waitingEntries = state.waiting.filter((entry) => entry.hotelName === hotel.name).length;
+
+        el.innerHTML =
+        "Available Rooms (Today): " + availableToday + "/5<br>" +
+        "Vacant Rooms (Next Date): " + vacantRooms + " (" + (nextVacancyDate ? formatISODate(nextVacancyDate) : "N/A") + ")<br>" +
+        "Waiting List Entries: " + waitingEntries;
+    });
+}
+
+</script>
+
+</body>
+</html>
