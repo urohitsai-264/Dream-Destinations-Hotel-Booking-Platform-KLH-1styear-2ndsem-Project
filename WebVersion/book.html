@@ -46,6 +46,18 @@
 </div>
 
 <script>
+const placeSelect = document.getElementById("placeSelect");
+const queryParams = new URLSearchParams(window.location.search);
+const preselectedPlace = queryParams.get("place");
+
+if (preselectedPlace) {
+    const normalized = preselectedPlace.trim().toLowerCase();
+    const matchedOption = Array.from(placeSelect.options).find((option) => option.value.toLowerCase() === normalized);
+    if (matchedOption) {
+        placeSelect.value = matchedOption.value;
+        placeSelect.disabled = true;
+    }
+}
 
 // Form Submission
 document.getElementById("bookingForm").addEventListener("submit", function(e){
@@ -53,7 +65,7 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
 
     let name = document.getElementById("name").value.trim();
     let email = document.getElementById("email").value.trim();
-    let place = document.getElementById("placeSelect").value;
+    let place = placeSelect.value;
     let checkin = document.getElementById("checkin").value;
     let checkout = document.getElementById("checkout").value;
     let rooms = parseInt(document.getElementById("rooms").value);

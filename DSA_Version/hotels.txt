@@ -4,9 +4,9 @@
 4,2,Snow Peak Resort,5200.0,5
 5,2,Mountain View Inn,3900.0,5
 6,2,Manali Comfort Stay,4500.0,5
-7,3,Capital Residency,5500.0,5
+7,3,Capital Residency,5500.0,0
 8,3,Delhi Royal Stay,6200.0,5
-9,3,Metro Grand Hotel,4700.0,5
+9,3,Metro Grand Hotel,4700.0,0
 10,4,Hill View Resort,4000.0,5
 11,4,Ooty Lake Stay,3500.0,5
 12,4,Green Valley Hotel,4800.0,5

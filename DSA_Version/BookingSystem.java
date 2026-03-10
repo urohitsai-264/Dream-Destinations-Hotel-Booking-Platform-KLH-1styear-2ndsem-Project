@@ -253,8 +253,6 @@ public class BookingSystem {
     }
 
     private void printHotels(List<Models.Hotel> hotels) {
-        System.out.println("(Available Rooms shown below are for today.)");
-        System.out.println("(Vacant Rooms shown below are on next date where at least 1 room is free.)");
         List<Models.Booking> bookings = store.readBookings();
         List<Models.Hotel> sortedByPrice = DSA.bubbleSortHotelsByPrice(hotels);
         for (Models.Hotel h : sortedByPrice) {

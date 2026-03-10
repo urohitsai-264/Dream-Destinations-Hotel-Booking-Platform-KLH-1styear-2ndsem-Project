@@ -8,11 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataStore {
-    private static final String USERS = "users.txt";
-    private static final String DESTINATIONS = "destinations.txt";
-    private static final String HOTELS = "hotels.txt";
-    private static final String BOOKINGS = "bookings.txt";
-    private static final String WAITING = "waitinglist.txt";
+    private static final String BASE_DIR = "DSA_Version";
+    private static final String USERS = resolvePath("users.txt");
+    private static final String DESTINATIONS = resolvePath("destinations.txt");
+    private static final String HOTELS = resolvePath("hotels.txt");
+    private static final String BOOKINGS = resolvePath("bookings.txt");
+    private static final String WAITING = resolvePath("waitinglist.txt");
+
+    private static String resolvePath(String fileName) {
+        File baseDir = new File(BASE_DIR);
+        if (baseDir.exists() && baseDir.isDirectory()) {
+            return new File(baseDir, fileName).getPath();
+        }
+        return fileName;
+    }
 
     public void initializeFiles() {
         create(USERS);
